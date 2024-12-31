@@ -3,6 +3,7 @@
 
 namespace Textilz\Jsondb4php\classes;
 
+use Exception;
 use stdClass;
 use Textilz\Jsondb4php\interfaces\FieldInterface;
 use Textilz\Jsondb4php\interfaces\TypeInterface;
@@ -19,11 +20,13 @@ class Field implements FieldInterface
         'foreignEntry' => false,
         'length' => null,
         'default' => null,
+        'autoincrement' => false,
     ];
 
     static public function create(): stdClass
     {
-        $result = (object) self::$params; // Создаем объект из текущих параметров
+        Field::checkCompatibilityValues();
+        $result = (object) self::$params;
         self::resetParams();
         return (object) $result;
     }
@@ -38,6 +41,7 @@ class Field implements FieldInterface
             'foreign' => false,
             'length' => null,
             'default' => null,
+            'autoincrement' => false,
         ];
     }
 
@@ -61,6 +65,7 @@ class Field implements FieldInterface
 
     static public function primary(bool $primary = true): FieldInterface
     {
+        Field::unique();
         self::$params['primary'] = $primary;
         return new self();
     }
@@ -84,9 +89,35 @@ class Field implements FieldInterface
         return new self();
     }
 
-    static public function default(mixed $value = true): FieldInterface
+    static public function default(mixed $value = null): FieldInterface
     {
         self::$params['default'] = $value;
         return new self();
+    }
+
+    static public function autoincrement(bool $autoincrement = true): FieldInterface
+    {
+        Field::unique();
+        self::$params['autoincrement'] = $autoincrement;
+        return new self();
+    }
+
+    static private function checkCompatibilityValues(): void
+    {
+        if (self::$params['type'] !== Type::INT && self::$params['autoincrement'])
+            throw new Exception("Авто инкремент должен быть INT");
+
+        if (
+            (self::$params['type'] !== Type::INT
+            && self::$params['type'] !== Type::STRING)
+            && self::$params['primary'])
+            throw new Exception("Внешний ключ может быть только INT или STRING");
+
+        if (self::$params['primary'] && !self::$params['unique'])
+            throw new Exception("Внешний ключ должен быть уникальным");
+
+        if (self::$params['primary'] && !self::$params['unique'])
+            throw new Exception("Внешний ключ должен быть уникальным");
+
     }
 }

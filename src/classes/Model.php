@@ -38,7 +38,6 @@ class Model extends QueryTables implements ModelInterface
             }
             if (!$this->fieldOverlap($this->tableName, $entry))
                 throw new Exception("Поле '{$entry->name}' имеет другие параметры.");
-
         }
         return true;
     }

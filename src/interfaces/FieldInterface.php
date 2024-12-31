@@ -78,5 +78,13 @@ interface FieldInterface
      * @param mixed $value
      * @return self
      */
-    static public function default(mixed $value = true): self;
+    static public function default(mixed $value = null): self;
+
+    /**
+     * Авто инкремент
+     *
+     * @param bool $autoincrement
+     * @return self
+     */
+    static public function autoincrement(bool $autoincrement = true): self;
 }
