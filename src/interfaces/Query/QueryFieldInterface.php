@@ -69,4 +69,13 @@ interface QueryFieldInterface
      * @return bool
      */
     public function checkEntriesField(string $table, string $fieldName): bool;
+
+    /**
+     * Совпадение параметров поля
+     *
+     * @param string $table
+     * @param stdClass $params
+     * @return bool
+     */
+    public function fieldOverlap(string $table, stdClass $params): bool;
 }

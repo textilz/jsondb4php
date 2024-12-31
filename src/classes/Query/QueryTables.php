@@ -14,13 +14,7 @@ abstract class QueryTables extends QueryField implements QueryTableInterface
         $file = $this->file($this->fullPath);
         $file['tables'][] = [
             'name' => $name,
-            'fields' => [
-                'id' => [
-                    'type' => Type::INT,
-                    'primary' => true,
-                    'autoIncrement' => true,
-                ]
-            ],
+            'fields' => [],
             'entries' => [],
             'created' => time()
         ];

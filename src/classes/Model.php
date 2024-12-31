@@ -28,13 +28,17 @@ class Model extends QueryTables implements ModelInterface
      */
     public function migrate($entries): bool
     {
-        if ($this->isExistTable($this->tableName)) return true;
-        else {
+        if (!$this->isExistTable($this->tableName)) {
             $this->createTable($this->tableName);
-            foreach ($entries as $entry) {
-                if ($this->isExistField($this->tableName, $entry->name)) continue;
+        }
+        foreach ($entries as $entry) {
+            if (!$this->isExistField($this->tableName, $entry->name)) {
                 $this->createField($this->getTableIndex($this->tableName), $entry);
+                continue;
             }
+            if (!$this->fieldOverlap($this->tableName, $entry))
+                throw new Exception("Поле '{$entry->name}' имеет другие параметры.");
+
         }
         return true;
     }

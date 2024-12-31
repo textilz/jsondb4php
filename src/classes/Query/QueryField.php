@@ -29,10 +29,14 @@ abstract class QueryField extends QueryEntry implements QueryFieldInterface
     public function createField(int $tableIndex, stdClass $params): bool
     {
         $file = $this->file($this->fullPath);
-        $file['tables'][$tableIndex]['fields'][$params->name] = [
-            'type' => $params->type,
-            'created' => time()
-        ];
+
+        foreach ($params as $key => $param) {
+            if (empty($param) || $key == "name") continue;
+            $args[$key] = $param;
+        }
+        $args['created'] = time();
+
+        $file['tables'][$tableIndex]['fields'][$params->name] = $args;
 
         $this->save($file, $this->fullPath);
 
@@ -45,6 +49,23 @@ abstract class QueryField extends QueryEntry implements QueryFieldInterface
         $keys = array_keys($fields);
         if (count(array_filter($keys, function ($item) use ($field) {return $item === $field;})) <= 0) return false;
         else return $fields[$field];
+    }
+
+    public function fieldOverlap(string $table, stdClass $params): bool
+    {
+        $fields = $this->getField($table);
+        $fields = $fields[$params->name];
+        foreach ($params as $key => $value) {
+            if ($key == "name") continue;
+            if (empty($value) && empty($fields[$key])) continue;
+            if (
+                !empty($value) && empty($fields[$key])
+                || empty($value) && !empty($fields[$key])
+                || $value != $fields[$key]
+            ) return false;
+
+        }
+        return true;
     }
 
     public function updateField(string $table, string $fieldName, array $params): bool
