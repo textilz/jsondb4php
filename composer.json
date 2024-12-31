@@ -1,0 +1,16 @@
+{
+    "name": "textilz/jsondb4php",
+    "autoload": {
+        "psr-4": {
+            "Textilz\\Jsondb4php\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "textilz"
+        }
+    ],
+    "require": {
+        "php": ">=8.0"
+    }
+}
