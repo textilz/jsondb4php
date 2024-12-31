@@ -14,9 +14,9 @@ interface QueryDatabaseInterface
     /**
      * Проверить существование базы данных
      *
-     * @return bool
+     * @return false|array
      */
-    public function isExistsDatabase(): bool;
+    public function isExistsDatabase(): false|array;
 
     /**
      * Удалить базу данных

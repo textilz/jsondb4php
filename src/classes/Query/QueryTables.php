@@ -29,22 +29,28 @@ abstract class QueryTables extends QueryField implements QueryTableInterface
         return true;
     }
 
-    public function getTables(): array
+    public function getTables(?string $table = null): array
     {
-        return [];
+        $file = $this->file($table);
+        if ($table) return $file['tables'];
+        else {
+            foreach ($file['tables'] as $item) {
+                if ($item['name'] === 'users') {
+                    return $item;
+                }
+            }
+            throw new Exception("Таблица '$table' не найдена");
+        }
     }
 
-    /**
-     * @throws Exception
-     */
-    public function isExistTable(string $name): bool
+    public function isExistTable(string $name): false|array
     {
         $file = $this->file($this->fullPath);
         $exists = false;
 
         foreach ($file['tables'] as $item) {
             if ($item['name'] === 'users') {
-                $exists = true;
+                $exists = $item;
                 break;
             }
         }
@@ -60,5 +66,17 @@ abstract class QueryTables extends QueryField implements QueryTableInterface
     public function dropTable(string $name): bool
     {
         return true;
+    }
+
+    public function getTableIndex(string $table): int
+    {
+        $file = $this->file($this->fullPath);
+
+        $tables = $file['tables'];
+
+        $index = array_search($table, array_column($tables, 'name'));
+
+        if ($index !== false) return $index;
+        else throw new Exception('Таблица не найдена');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Textilz\Jsondb4php\interfaces\Query;
 
+use Exception;
 use Textilz\Jsondb4php\classes\Database;
 
 interface QueryTableInterface
@@ -9,9 +10,11 @@ interface QueryTableInterface
     /**
      * Все таблицы
      *
+     * @param string|null $table
      * @return array
+     * @throws Exception
      */
-    public function getTables(): array;
+    public function getTables(?string $table = null): array;
 
     /**
      * Создать таблицу
@@ -25,9 +28,9 @@ interface QueryTableInterface
      * Существует ли таблица
      *
      * @param string $name
-     * @return bool
+     * @return false|array
      */
-    public function isExistTable(string $name): bool;
+    public function isExistTable(string $name): false|array;
 
     /**
      * Обновить таблицу
@@ -45,4 +48,12 @@ interface QueryTableInterface
      * @return bool
      */
     public function dropTable(string $name): bool;
+
+    /**
+     * Индекс таблицы
+     *
+     * @param string $table
+     * @return int
+     */
+    public function getTableIndex(string $table): int;
 }

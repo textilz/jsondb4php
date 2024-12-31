@@ -2,6 +2,7 @@
 
 namespace Textilz\Jsondb4php\interfaces\Query;
 
+use stdClass;
 use Textilz\Jsondb4php\classes\Field;
 
 interface QueryFieldInterface
@@ -12,25 +13,25 @@ interface QueryFieldInterface
      * @param string $table
      * @return array
      */
-    public function getFields(string $table): array;
+    public function getField(string $table): array;
 
     /**
      * Создать поле
      *
-     * @param string $table
-     * @param array $params
+     * @param int $tableIndex
+     * @param stdClass $params
      * @return bool
      */
-    public function createField(string $table, array $params): bool;
+    public function createField(int $tableIndex, stdClass $params): bool;
 
     /**
      * Проверка поля на существование
      *
      * @param string $table
      * @param string $field
-     * @return bool
+     * @return false|array
      */
-    public function isExistField(string $table, string $field): bool;
+    public function isExistField(string $table, string $field): false|array;
 
     /**
      * Обновить поле

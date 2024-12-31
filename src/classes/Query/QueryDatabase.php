@@ -8,9 +8,9 @@ use Textilz\Jsondb4php\traits\QueryTrait;
 
 abstract class QueryDatabase extends QueryTables implements QueryDatabaseInterface
 {
-    public function isExistsDatabase(): bool
+    public function isExistsDatabase(): false|array
     {
-        return file_exists($this->fullPath);
+        return file_exists($this->fullPath) ? $this->file($this->fullPath) : false;
     }
 
     public function createDatabase(): bool

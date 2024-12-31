@@ -12,25 +12,31 @@ class Model extends QueryTables implements ModelInterface
     protected Database $database;
     protected string $tableName;
 
+    /**
+     * @throws Exception
+     */
     public function __construct(Database $database, string $tableName, $entries)
     {
         $this->database = $database;
         $this->tableName = strtolower($tableName);
         $this->fullPath = $database->fullPath;
-        $this->migrate();
+        $this->migrate($entries);
     }
 
     /**
      * @throws Exception
      */
-    public function migrate(): bool
+    public function migrate($entries): bool
     {
         if ($this->isExistTable($this->tableName)) return true;
         else {
-//            print_r('qwe');
             $this->createTable($this->tableName);
-            return true;
+            foreach ($entries as $entry) {
+                if ($this->isExistField($this->tableName, $entry->name)) continue;
+                $this->createField($this->getTableIndex($this->tableName), $entry);
+            }
         }
+        return true;
     }
 
     public function get(): array
