@@ -11,14 +11,15 @@ abstract class QueryField extends QueryEntry implements QueryFieldInterface
     /**
      * @throws Exception
      */
-    public function getField(string $table): array
+    public function getFields(string $table, ?string $field = null): array|null
     {
         $file = $this->file($this->fullPath);
         $array = [];
 
         foreach ($file['tables'] as $item) {
             if ($item['name'] === $table) {
-                $array = $item['fields'];
+                if ($field === null) $array = $item['fields'];
+                else $array = $item['fields'][$field] ?? null;
                 break;
             }
         }
@@ -28,6 +29,7 @@ abstract class QueryField extends QueryEntry implements QueryFieldInterface
 
     public function createField(int $tableIndex, stdClass $params): bool
     {
+        if ($this->getFields($this->tableName, $params->name)) throw new Exception("Поле {$params->name} уже существует");
         $file = $this->file($this->fullPath);
 
         foreach ($params as $key => $param) {
@@ -45,16 +47,20 @@ abstract class QueryField extends QueryEntry implements QueryFieldInterface
 
     public function isExistField(string $table, string $field): false|array
     {
-        $fields = $this->getField($table);
+        $fields = $this->getFields($table);
         $keys = array_keys($fields);
         if (count(array_filter($keys, function ($item) use ($field) {return $item === $field;})) <= 0) return false;
         else return $fields[$field];
     }
 
+    /**
+     * @throws Exception
+     */
     public function fieldOverlap(string $table, stdClass $params): bool
     {
-        $fields = $this->getField($table);
-        $fields = $fields[$params->name];
+        $fields = $this->getFields($table);
+        $fields = $fields[$params->name] ?? null;
+        if ($fields === null) return throw new Exception("Поле {$params->name} не существует");
         foreach ($params as $key => $value) {
             if ($key == "name") continue;
             if (empty($value) && empty($fields[$key])) continue;

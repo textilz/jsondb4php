@@ -9,15 +9,15 @@ interface ModelInterface
     /**
      * @param Database $database
      * @param string $tableName
-     * @param array $entries
+     * @param array $fields
      */
-    public function __construct(Database $database, string $tableName, array $entries);
+    public function __construct(Database $database, string $tableName, array $fields);
 
     /**
      * Создание таблицы с полями
      *
-     * @param $entries
+     * @param $fields
      * @return bool
      */
-    public function migrate($entries): bool;
+    public function migrate($fields): bool;
 }

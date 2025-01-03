@@ -11,9 +11,10 @@ interface QueryFieldInterface
      * Получить все поля таблицы
      *
      * @param string $table
-     * @return array
+     * @param string|null $field
+     * @return array|null
      */
-    public function getField(string $table): array;
+    public function getFields(string $table, ?string $field = null): array|null;
 
     /**
      * Создать поле

@@ -6,7 +6,7 @@ use Exception;
 use Textilz\Jsondb4php\interfaces\Query\QueryDatabaseInterface;
 use Textilz\Jsondb4php\traits\QueryTrait;
 
-abstract class QueryDatabase extends QueryTables implements QueryDatabaseInterface
+abstract class QueryDatabase extends QueryTable implements QueryDatabaseInterface
 {
     public function isExistsDatabase(): false|array
     {

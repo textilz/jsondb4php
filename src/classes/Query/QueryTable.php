@@ -7,7 +7,7 @@ use Textilz\Jsondb4php\classes\Type;
 use Textilz\Jsondb4php\interfaces\Query\QueryTableInterface;
 use Textilz\Jsondb4php\classes\Query\QueryField;
 
-abstract class QueryTables extends QueryField implements QueryTableInterface
+abstract class QueryTable extends QueryField implements QueryTableInterface
 {
     public function createTable($name): bool
     {
