@@ -26,26 +26,26 @@ abstract class QueryEntry implements QueryEntryInterface
         ],
     ];
 
-    public function select(...$args): QueryEntryInterface
+    public function selectEntry(...$args): QueryEntryInterface
     {
         $this->params = array_merge($this->params, $args);
         return $this;
     }
 
-    public function create(...$params): bool
+    public function createEntry(array $params): bool
     {
-//        $file = $this->file();
-//        var_dump($file);
+        $file = $this->file($this->fullPath);
+        var_dump($file);
 
         return true;
     }
 
-    public function update($id, ...$params): bool
+    public function updateEntry($id, ...$params): bool
     {
         return true;
     }
 
-    public function delete($id, ...$params): bool
+    public function deleteEntry($id, ...$params): bool
     {
         return true;
     }

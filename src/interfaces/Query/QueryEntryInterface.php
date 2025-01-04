@@ -10,15 +10,15 @@ interface QueryEntryInterface
      * @param ...$args
      * @return self
      */
-    public function select(...$args): self;
+    public function selectEntry(...$args): self;
 
     /**
      * Создать запись в таблице
      *
-     * @param ...$params
+     * @param array $params
      * @return bool
      */
-    public function create(...$params): bool;
+    public function createEntry(array $params): bool;
 
     /**
      * Обновить запись
@@ -27,7 +27,7 @@ interface QueryEntryInterface
      * @param ...$params
      * @return bool
      */
-    public function update($id, ...$params): bool;
+    public function updateEntry($id, ...$params): bool;
 
     /**
      * Удалить запись
@@ -36,7 +36,7 @@ interface QueryEntryInterface
      * @param ...$params
      * @return bool
      */
-    public function delete($id, ...$params): bool;
+    public function deleteEntry($id, ...$params): bool;
 
     /**
      * Условие для фильтрации
