@@ -41,14 +41,6 @@ class Model extends QueryTable implements ModelInterface
             if (!$this->matchingDbAndConfigField($fields))
                 throw new Exception("Указанные поля в конфигурации не совпадают с существующей базой данных");
         }
-//        foreach ($entries as $entry) {
-//            if (!$this->isExistField($this->tableName, $entry->name)) {
-//                $this->createField($this->getTableIndex($this->tableName), $entry);
-//                continue;
-//            }
-//            if (!$this->fieldOverlap($this->tableName, $entry))
-//                throw new Exception("Поле '{$entry->name}' имеет другие параметры.");
-//        }
         return true;
     }
 
@@ -65,7 +57,7 @@ class Model extends QueryTable implements ModelInterface
         $configNames = array_map(function($item) {
             return $item->name;
         }, $configFields);
-        $dbNames = array_keys($this->getField($this->tableName));
+        $dbNames = array_keys($this->getFields($this->tableName));
 
         sort($configNames);
         sort($dbNames);
@@ -86,5 +78,23 @@ class Model extends QueryTable implements ModelInterface
     public function last(): array
     {
         return parent::lastEntry($this->tableName);
+    }
+
+    public function create(array $params): array
+    {
+        $fields = $this->getFields($this->tableName);
+        $requiredFields = array_keys(array_filter(
+            $fields,
+            function($field) {
+                return $field['null'] === false && $field['primary'] === false && $field['default'] === null;
+            }));
+
+        if (count(array_intersect($requiredFields, array_keys($params))) !== count($requiredFields)) {
+            $diff = array_diff($requiredFields, array_keys($params));
+            throw new Exception("Поле {$diff[0]} не имеет значения по умолчанию");
+        }
+
+
+        return [];
     }
 }

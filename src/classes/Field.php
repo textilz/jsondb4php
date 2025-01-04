@@ -66,6 +66,7 @@ class Field implements FieldInterface
     static public function primary(bool $primary = true): FieldInterface
     {
         Field::unique();
+        Field::null(false);
         self::$params['primary'] = $primary;
         return new self();
     }
