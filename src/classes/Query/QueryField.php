@@ -33,7 +33,7 @@ abstract class QueryField extends QueryEntry implements QueryFieldInterface
         $file = $this->file($this->fullPath);
 
         foreach ($params as $key => $param) {
-            if (empty($param) || $key == "name") continue;
+            if ($key == "name") continue;
             $args[$key] = $param;
         }
         $args['created'] = time();
